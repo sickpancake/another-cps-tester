@@ -6,3 +6,6 @@
 pip install flet[all]
 pip install pylint
 ```
+
+## Design
+wip
