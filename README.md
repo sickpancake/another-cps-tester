@@ -9,4 +9,8 @@ pip install pylint
 
 ## Design
 
-wip
+### V1
+
+<img src="assets/designV1.jpg" width = 500>
+
+> Diagram made with drawio (zoom for better view)
