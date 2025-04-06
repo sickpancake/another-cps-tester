@@ -6,9 +6,19 @@ from src.backend import BackendCPSTester
 
 class TestCPSTester(unittest.TestCase):
     """Manages the tests of the backend code of Another-CPS-Tester"""
+    def __init__(self, methodName = "runTest"):
+        super().__init__(methodName)
+
+        self.is_called = False
+
+
     def setUp(self):
         """Setup runs before each test"""
-        self.cps_tester = BackendCPSTester()
+
+        def cb(_):
+            self.is_called = True
+
+        self.cps_tester = BackendCPSTester(cb)
 
     def test_addclick(self):
         """Test add one click"""
@@ -40,4 +50,25 @@ class TestCPSTester(unittest.TestCase):
         """Tests if the time is up after 5 seconds"""
         self.cps_tester.start()
         sleep(5)
+        self.assertTrue(self.cps_tester.is_time_up())
+
+    def test_timer_is_called_before_called(self):
+        """Tests is_called is False before called"""
+        self.assertFalse(self.is_called)
+
+    def test_timer_is_called_instantly_after_called(self):
+        """Tests is_called is False instantly after called"""
+        self.cps_tester.start()
+        self.assertFalse(self.is_called)
+
+    def test_timer_is_called_1_sec_after_called(self):
+        """Tests is_called is True 1 sec after called"""
+        self.cps_tester.start()
+        sleep(1)
+        self.assertTrue(self.is_called)
+
+    def test_timer_stops_after_time_up(self):
+        """Tests if the timer stops after the test duration ends"""
+        self.cps_tester.start()
+        sleep(self.cps_tester.config_test_duration + 0.01)
         self.assertTrue(self.cps_tester.is_time_up())
