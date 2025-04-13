@@ -1,6 +1,6 @@
 """Backend code for Another-CPS-Tester"""
-from threading import Timer
-from time import time
+from threading import Thread
+from time import time, sleep
 from typing import Callable
 
 class BackendCPSTester:
@@ -12,7 +12,7 @@ class BackendCPSTester:
         self.end_time = self.start_time + self.config_test_duration
 
         self.callback_function_external = callback_function_external
-        self.timer = Timer(0.01, self.callback_function)
+        self.background_thread = Thread(target=self.background_loop, daemon=True)
 
     def add_click(self):
         """Adds a click"""
@@ -23,16 +23,14 @@ class BackendCPSTester:
         self.start_time = time()
         self.end_time = self.start_time + self.config_test_duration
 
-        self.timer.start()
+        self.background_thread.start()
 
     def is_time_up(self):
         """Checks if test duration has elapsed"""
         return time() >= self.end_time
 
-    def callback_function(self):
-        """A callback function that runs every hundredth of a second"""
-        is_time_up = self.is_time_up()
-        if is_time_up:
-            self.timer.cancel()
-
-        self.callback_function_external(is_time_up)
+    def background_loop(self):
+        """Background loop that runs every hundredths of a milisecond"""
+        while not self.is_time_up():
+            self.callback_function_external(self.is_time_up())
+            sleep(0.01)

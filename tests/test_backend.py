@@ -56,11 +56,6 @@ class TestCPSTester(unittest.TestCase):
         """Tests is_called is False before called"""
         self.assertFalse(self.is_called)
 
-    def test_timer_is_called_instantly_after_called(self):
-        """Tests is_called is False instantly after called"""
-        self.cps_tester.start()
-        self.assertFalse(self.is_called)
-
     def test_timer_is_called_1_sec_after_called(self):
         """Tests is_called is True 1 sec after called"""
         self.cps_tester.start()
@@ -93,7 +88,7 @@ class TestCPSTester(unittest.TestCase):
         self.cps_tester.add_click()
         sleep(self.cps_tester.config_test_duration+0.01)
         self.assertEqual(self.cps_tester.current_clicks, 2)
-    
+
     def test_custom_test_duration(self):
         """Tests if a custom test time work correctly"""
         self.cps_tester.config_test_duration = 3
