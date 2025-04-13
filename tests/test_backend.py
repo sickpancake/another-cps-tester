@@ -96,3 +96,18 @@ class TestCPSTester(unittest.TestCase):
         self.assertFalse(self.cps_tester.is_time_up())
         sleep(3.1)
         self.assertTrue(self.cps_tester.is_time_up())
+
+    def test_instant_calculation_current_clicks(self):
+        """Tests if the current_clicks in the instant calculation is correct"""
+
+    def test_instant_calculation_current_cps(self):
+        """Tests if the current_cps in the instant calculation is correct""" 
+
+    def test_instant_calculation_time_left(self):
+        """Tests if the time_left in the instant calculation is correct"""
+
+    def test_final_calculation_total_clicks(self):
+        """Tests if the total_clicks in the final calculation is correct"""
+
+    def test_final_calculation_total_cps(self):
+        """Tests if the total_cps in the final calculation is correct"""
