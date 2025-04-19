@@ -97,14 +97,53 @@ class TestCPSTester(unittest.TestCase):
         sleep(3.1)
         self.assertTrue(self.cps_tester.is_time_up())
 
+    def test_instan_calculation_default_values(self):
+        """Tests if the values in the instant calculation is correct when the cps_tester hasn't started"""
+        results = self.cps_tester.instant_calculate()
+        self.assertEqual(results.current_clicks, -1)
+        self.assertEqual(results.current_cps, -1)
+        self.assertEqual(results.time_left, -1)
+
     def test_instant_calculation_current_clicks(self):
-        """Tests if the current_clicks in the instant calculation is correct"""
+        """Tests if the current_clicks in the instant calculation is correct when only clicked once"""
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        self.assertEqual(self.cps_tester.instant_calculate().current_clicks, 1)
+
+    def test_instant_calculation_multiple_current_clicks(self):
+        """Tests if the current_clicks in the instant calculation is correct when clicked multiple times"""
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        self.cps_tester.add_click()
+        self.cps_tester.add_click()
+        self.assertEqual(self.cps_tester.instant_calculate().current_clicks, 3)
 
     def test_instant_calculation_current_cps(self):
         """Tests if the current_cps in the instant calculation is correct""" 
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        self.cps_tester.add_click()
+        sleep(1)
+        self.assertEqual(self.cps_tester.instant_calculate().current_cps, 2)
+
+    def test_instant_calculation_current_cps_with_float(self):
+        """Tests if the current_cps in the instant calculation is correct when the time is not a whole number""" 
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        sleep(0.5)
+        self.assertEqual(self.cps_tester.instant_calculate().current_cps, 2)
 
     def test_instant_calculation_time_left(self):
         """Tests if the time_left in the instant calculation is correct"""
+        self.cps_tester.start()
+        sleep(1)
+        self.assertEqual(self.cps_tester.instant_calculate().time_left, 4)
+
+    def test_instant_calculation_time_left_when_time_over(self):
+        """Tests if the time_left in the instant calculation is correct when time's over"""
+        self.cps_tester.start()
+        sleep(5.1)
+        self.assertEqual(self.cps_tester.instant_calculate().time_left, -1)
 
     def test_final_calculation_total_clicks(self):
         """Tests if the total_clicks in the final calculation is correct"""
