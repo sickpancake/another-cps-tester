@@ -15,13 +15,14 @@ class FinalResult:
     def __init__(self):
         self.total_clicks = -1
         self.total_cps = -1
+
 class BackendCPSTester:
     """Manages all backend code for Another-CPS-Tester"""
     def __init__(self, callback_function_external: Callable[[bool], None]):
         self.current_clicks = 0
-        self.config_test_duration = 5 #seconds
-        self.start_time = time()
-        self.end_time = self.start_time + self.config_test_duration
+        self.config_test_duration = 5.0 #seconds
+        self.start_time = 0
+        self.end_time = 0
 
         self.callback_function_external = callback_function_external
         self.background_thread = Thread(target=self.background_loop, daemon=True)
@@ -49,6 +50,18 @@ class BackendCPSTester:
 
     def instant_calculate(self) -> InstantResult:
         """Calculates the instant results"""
+        dummy = InstantResult()
+        dummy.current_clicks = self.current_clicks
+        dummy.current_cps = self.current_clicks/(self.end_time-time())
+        itu = self.is_time_up()
+        if itu:
+            dummy.time_left = 0
+        else:
+            t = time()
+            dummy.time_left = self.end_time-t #seconds
+
+        return dummy
+
 
     def final_calculate(self) -> FinalResult:
         """Calculates the final results"""

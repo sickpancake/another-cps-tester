@@ -100,9 +100,9 @@ class TestCPSTester(unittest.TestCase):
     def test_instan_calculation_default_values(self):
         """Tests if the values in the instant calculation is correct when the cps_tester hasn't started"""
         results = self.cps_tester.instant_calculate()
-        self.assertEqual(results.current_clicks, -1)
-        self.assertEqual(results.current_cps, -1)
-        self.assertEqual(results.time_left, -1)
+        self.assertEqual(results.current_clicks, 0)
+        self.assertEqual(results.current_cps, 0)
+        self.assertEqual(results.time_left, 0)
 
     def test_instant_calculation_current_clicks(self):
         """Tests if the current_clicks in the instant calculation is correct when only clicked once"""
@@ -143,7 +143,7 @@ class TestCPSTester(unittest.TestCase):
         """Tests if the time_left in the instant calculation is correct when time's over"""
         self.cps_tester.start()
         sleep(5.1)
-        self.assertEqual(self.cps_tester.instant_calculate().time_left, -1)
+        self.assertEqual(self.cps_tester.instant_calculate().time_left, 0)
 
     def test_final_calculation_total_clicks(self):
         """Tests if the total_clicks in the final calculation is correct"""
