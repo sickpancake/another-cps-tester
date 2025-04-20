@@ -147,6 +147,36 @@ class TestCPSTester(unittest.TestCase):
 
     def test_final_calculation_total_clicks(self):
         """Tests if the total_clicks in the final calculation is correct"""
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        self.cps_tester.add_click()
+        sleep(5.1)
+        self.assertEqual(self.cps_tester.final_calculate().total_clicks, 2)
 
     def test_final_calculation_total_cps(self):
         """Tests if the total_cps in the final calculation is correct"""
+        self.cps_tester.start()
+        for _ in range(0, 10):
+            self.cps_tester.add_click()
+        sleep(5.1)
+        self.assertEqual(self.cps_tester.final_calculate().total_cps, 2)
+
+    def test_final_calculation_total_cps_float(self):
+        """Tests if the total_cps in the final calculation is correct when the total_cps is not a whole number"""
+        self.cps_tester.start()
+        for _ in range(0, 7):
+            self.cps_tester.add_click()
+        sleep(5.1)
+        self.assertEqual(self.cps_tester.final_calculate().total_cps, 1.4)
+
+    def test_final_calculation_before_end(self):
+        """Tests the values of the final calculation when the cps tester did not end yet"""
+        self.cps_tester.start()
+        sleep(0.1)
+        self.assertEqual(self.cps_tester.final_calculate().total_clicks, -1)
+        self.assertEqual(self.cps_tester.final_calculate().total_cps, -1)
+
+    def test_final_calculation_default_values(self):
+        """Tests the values of the final calculation when the cps tester did not start"""
+        self.assertEqual(self.cps_tester.final_calculate().total_clicks, -1)
+        self.assertEqual(self.cps_tester.final_calculate().total_cps, -1)
