@@ -51,14 +51,14 @@ class BackendCPSTester:
     def instant_calculate(self) -> InstantResult:
         """Calculates the instant results"""
         dummy = InstantResult()
+        t = time()
         dummy.current_clicks = self.current_clicks
-        dummy.current_cps = self.current_clicks/(self.end_time-time())
+        dummy.current_cps = round(self.current_clicks/(t-self.start_time), 2)
         itu = self.is_time_up()
         if itu:
             dummy.time_left = 0
         else:
-            t = time()
-            dummy.time_left = self.end_time-t #seconds
+            dummy.time_left = round(self.end_time-t, 2) #seconds
 
         return dummy
 

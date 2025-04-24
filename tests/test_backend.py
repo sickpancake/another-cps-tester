@@ -124,20 +124,20 @@ class TestCPSTester(unittest.TestCase):
         self.cps_tester.add_click()
         self.cps_tester.add_click()
         sleep(1)
-        self.assertEqual(self.cps_tester.instant_calculate().current_cps, 2)
+        self.assertAlmostEqual(self.cps_tester.instant_calculate().current_cps, 2)
 
     def test_instant_calculation_current_cps_with_float(self):
         """Tests if the current_cps in the instant calculation is correct when the time is not a whole number""" 
         self.cps_tester.start()
         self.cps_tester.add_click()
         sleep(0.5)
-        self.assertEqual(self.cps_tester.instant_calculate().current_cps, 2)
+        self.assertAlmostEqual(self.cps_tester.instant_calculate().current_cps, 2)
 
     def test_instant_calculation_time_left(self):
         """Tests if the time_left in the instant calculation is correct"""
         self.cps_tester.start()
         sleep(1)
-        self.assertEqual(self.cps_tester.instant_calculate().time_left, 4)
+        self.assertAlmostEqual(self.cps_tester.instant_calculate().time_left, 4)
 
     def test_instant_calculation_time_left_when_time_over(self):
         """Tests if the time_left in the instant calculation is correct when time's over"""
