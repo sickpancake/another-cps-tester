@@ -65,3 +65,8 @@ class BackendCPSTester:
 
     def final_calculate(self) -> FinalResult:
         """Calculates the final results"""
+        dummy = FinalResult()
+        if self.end_time != 0 and self.is_time_up():
+            dummy.total_clicks = self.current_clicks
+            dummy.total_cps = self.current_clicks/5
+        return dummy
