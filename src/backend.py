@@ -20,9 +20,9 @@ class BackendCPSTester:
     """Manages all backend code for Another-CPS-Tester"""
     def __init__(self, callback_function_external: Callable[[bool], None]):
         self.current_clicks = 0
-        self.config_test_duration = 5.0 #seconds
         self.start_time = 0
         self.end_time = 0
+        self.config_test_duration = 5.0 #seconds
 
         self.callback_function_external = callback_function_external
         self.background_thread = Thread(target=self.background_loop, daemon=True)
@@ -70,3 +70,9 @@ class BackendCPSTester:
             dummy.total_clicks = self.current_clicks
             dummy.total_cps = self.current_clicks/5
         return dummy
+
+    def reset_to_default(self):
+        """Resets to default"""
+        self.current_clicks = 0
+        self.start_time = 0
+        self.end_time = 0

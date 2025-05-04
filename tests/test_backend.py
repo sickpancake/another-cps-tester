@@ -180,3 +180,14 @@ class TestCPSTester(unittest.TestCase):
         """Tests the values of the final calculation when the cps tester did not start"""
         self.assertEqual(self.cps_tester.final_calculate().total_clicks, -1)
         self.assertEqual(self.cps_tester.final_calculate().total_cps, -1)
+
+    def test_reset_to_default(self):
+        """Tests the reset"""
+        self.cps_tester.start()
+        self.cps_tester.add_click()
+        self.cps_tester.add_click()
+        sleep(5.1)
+        self.cps_tester.reset_to_default()
+        self.assertEqual(self.cps_tester.current_clicks, 0)
+        self.assertEqual(self.cps_tester.start_time, 0)
+        self.assertEqual(self.cps_tester.end_time, 0)
