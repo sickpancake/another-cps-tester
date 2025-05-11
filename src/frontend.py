@@ -1,5 +1,6 @@
 """Frontend code for Another-CPS-Tester"""
 import flet as ft
+from backend import BackendCPSTester
 
 def FrontendCPSTester(page: ft.Page):
     """Flet code for Another-CPS-Tester"""
