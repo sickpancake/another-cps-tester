@@ -4,6 +4,8 @@ from backend import BackendCPSTester
 
 def FrontendCPSTester(page: ft.Page):
     """Flet code for Another-CPS-Tester"""
+    def reset():
+        cps_tester.reset_to_default()
 
     def close_app(_):
         page.window.destroy()
@@ -28,6 +30,12 @@ def FrontendCPSTester(page: ft.Page):
         )
         page.open(page.open(final_result_dialogue))
         page.update()
+
+    def callback(_):
+        pass
+
+    cps_tester = BackendCPSTester(callback)
+    reset()
 
     close_button = ft.IconButton(icon="close", on_click=close_app, tooltip="Close APP")
 
