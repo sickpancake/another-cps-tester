@@ -44,9 +44,12 @@ class BackendCPSTester:
 
     def background_loop(self):
         """Background loop that runs every hundredths of a milisecond"""
-        while not self.is_time_up():
-            self.callback_function_external(self.is_time_up())
+        while True:
+            is_time_up = self.is_time_up()
+            self.callback_function_external(is_time_up)
             sleep(0.01)
+            if is_time_up:
+                break
 
     def instant_calculate(self) -> InstantResult:
         """Calculates the instant results"""
