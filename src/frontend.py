@@ -34,7 +34,7 @@ def FrontendCPSTester(page: ft.Page):
                 ft.IconButton(icon="close", on_click=lambda _: page.close(final_result_dialogue), tooltip="Close Results")
             ]
         )
-        page.open(page.open(final_result_dialogue))
+        page.open(final_result_dialogue)
         page.update()
 
     def update_click_button():
