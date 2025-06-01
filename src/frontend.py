@@ -2,7 +2,7 @@
 import flet as ft
 from backend import BackendCPSTester
 
-def FrontendCPSTester(page: ft.Page):
+def frontend_cps_tester(page: ft.Page):
     """Flet code for Another-CPS-Tester"""
     def reset():
         cps_tester.reset_to_default()
@@ -31,7 +31,11 @@ def FrontendCPSTester(page: ft.Page):
                 tight=True
             ),
             actions=[
-                ft.IconButton(icon="close", on_click=lambda _: page.close(final_result_dialogue), tooltip="Close Results")
+                ft.IconButton(
+                    icon="close",
+                    on_click=lambda _: page.close(final_result_dialogue),
+                    tooltip="Close Results"
+                )
             ]
         )
         page.open(final_result_dialogue)
@@ -110,6 +114,6 @@ def FrontendCPSTester(page: ft.Page):
 
     page.update()
 
-def openCPSTester():
+def open_cps_tester():
     """Run the app"""
-    ft.app(FrontendCPSTester)
+    ft.app(frontend_cps_tester)
