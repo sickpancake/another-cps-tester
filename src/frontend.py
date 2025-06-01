@@ -65,6 +65,7 @@ def FrontendCPSTester(page: ft.Page):
         if is_time_up is True:
             open_final_result()
             reset_click_button()
+            cps_tester.reset_to_default()
         else:
             update_click_button()
 

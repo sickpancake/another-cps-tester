@@ -79,3 +79,5 @@ class BackendCPSTester:
         self.current_clicks = 0
         self.start_time = 0
         self.end_time = 0
+
+        self.background_thread = Thread(target=self.background_loop, daemon=True)
