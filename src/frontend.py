@@ -10,9 +10,15 @@ def FrontendCPSTester(page: ft.Page):
     def close_app(_):
         page.window.destroy()
 
-    def open_final_result(_):
-        total_clicks = 0
-        total_cps = 0
+    def button_clicked(_):
+        if cps_tester.is_time_up() is True:
+            cps_tester.start()
+        cps_tester.add_click()
+
+    def open_final_result():
+        results = cps_tester.final_calculate()
+        total_clicks = results.total_clicks
+        total_cps = results.total_cps
 
         final_result_dialogue = ft.AlertDialog(
             title=ft.Text(value="CPS Test Results"),
@@ -31,15 +37,53 @@ def FrontendCPSTester(page: ft.Page):
         page.open(page.open(final_result_dialogue))
         page.update()
 
-    def callback(_):
-        pass
+    def update_click_button():
+        instant_results = cps_tester.instant_calculate()
+        click_button.content = ft.Column(
+            controls=[
+                ft.Text("Countiune Clicking!"),
+                ft.Text(f"Current Clicks: {instant_results.current_clicks}"),
+                ft.Text(f"Current CPS: {instant_results.current_cps}"),
+                ft.Text(f"Time Left: {instant_results.time_left} seconds")
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
+        )
+
+        page.update()
+
+    def reset_click_button():
+        click_button.content = ft.Column(
+            controls=[ft.Text("Click Me!")],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
+        )
+
+        page.update()
+
+    def callback(is_time_up: bool):
+        if is_time_up is True:
+            open_final_result()
+            reset_click_button()
+        else:
+            update_click_button()
+
 
     cps_tester = BackendCPSTester(callback)
     reset()
 
     close_button = ft.IconButton(icon="close", on_click=close_app, tooltip="Close APP")
 
-    click_button = ft.ElevatedButton(text="Click Me!" , width=200, height=100)
+    click_button = ft.ElevatedButton(
+        content=ft.Column(
+            controls=[ft.Text("Click Me!")],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
+        ),
+        width=250,
+        height=125,
+        on_click=button_clicked
+    )
 
     page.vertical_alignment = "spaceBetween"
     page.add(
@@ -59,7 +103,6 @@ def FrontendCPSTester(page: ft.Page):
             ],
             alignment="center"
         )
-        
     )
 
     page.title = "Another-CPS-Tester"
