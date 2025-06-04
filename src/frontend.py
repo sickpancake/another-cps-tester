@@ -36,7 +36,8 @@ def frontend_cps_tester(page: ft.Page):
                     on_click=lambda _: page.close(final_result_dialogue),
                     tooltip="Close Results"
                 )
-            ]
+            ],
+            on_dismiss=undisable_click_button
         )
         page.open(final_result_dialogue)
         page.update()
@@ -67,11 +68,17 @@ def frontend_cps_tester(page: ft.Page):
 
     def callback(is_time_up: bool):
         if is_time_up is True:
+            click_button.disabled = True
+            page.update()
             open_final_result()
             reset_click_button()
             cps_tester.reset_to_default()
         else:
             update_click_button()
+
+    def undisable_click_button(_):
+        click_button.disabled = False
+        page.update()
 
 
     cps_tester = BackendCPSTester(callback)
