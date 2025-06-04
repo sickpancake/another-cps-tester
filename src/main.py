@@ -1,7 +1,7 @@
 """Another-CPS-Tester"""
 
 #import backend
-#import frontend
+from frontend import open_cps_tester
 
 if __name__ == "__main__":
-    print("Hello World!")
+    open_cps_tester()
