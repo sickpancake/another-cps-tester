@@ -5,6 +5,13 @@
 ```shell
 pip install flet[all]
 pip install pylint
+
+```
+
+## How to Use
+
+```shell
+python3 main.py
 ```
 
 ## Design
