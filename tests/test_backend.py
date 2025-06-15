@@ -11,7 +11,6 @@ class TestCPSTester(unittest.TestCase):
 
         self.is_called = False
 
-
     def setUp(self):
         """Setup runs before each test"""
 
@@ -19,6 +18,7 @@ class TestCPSTester(unittest.TestCase):
             self.is_called = True
 
         self.cps_tester = BackendCPSTester(cb)
+        self.cps_tester.config_test_duration = 0.5
 
     def test_addclick(self):
         """Test add one click"""
@@ -38,18 +38,18 @@ class TestCPSTester(unittest.TestCase):
 
     def test_default_duration(self):
         """Test if the default test duration is 5"""
-        self.assertEqual(self.cps_tester.config_test_duration, 5)
+        self.assertEqual(self.cps_tester.config_test_duration, 0.5)
 
     def test_test_duration_false(self):
-        """Tests if the time is up after only 1 second"""
+        """Tests if the time is up after only 1/5 of the time"""
         self.cps_tester.start()
-        sleep(1)
+        sleep(self.cps_tester.config_test_duration * 0.2)
         self.assertFalse(self.cps_tester.is_time_up())
 
     def test_test_duration_true(self):
-        """Tests if the time is up after 5 seconds"""
+        """Tests if the time is up after the config test duration has passed"""
         self.cps_tester.start()
-        sleep(5)
+        sleep(self.cps_tester.config_test_duration)
         self.assertTrue(self.cps_tester.is_time_up())
 
     def test_timer_is_called_before_called(self):
@@ -59,7 +59,7 @@ class TestCPSTester(unittest.TestCase):
     def test_timer_is_called_1_sec_after_called(self):
         """Tests is_called is True 1 sec after called"""
         self.cps_tester.start()
-        sleep(1)
+        sleep(self.cps_tester.config_test_duration * 0.2)
         self.assertTrue(self.is_called)
 
     def test_timer_stops_after_time_up(self):
@@ -78,7 +78,7 @@ class TestCPSTester(unittest.TestCase):
 
         self.cps_tester = BackendCPSTester(cb)
         self.cps_tester.start()
-        sleep(1)
+        sleep(self.cps_tester.config_test_duration * 0.2)
         self.assertGreater(call_count, 1)
 
     def test_click_count_persists_after_timer_ends(self):
@@ -91,10 +91,10 @@ class TestCPSTester(unittest.TestCase):
 
     def test_custom_test_duration(self):
         """Tests if a custom test time work correctly"""
-        self.cps_tester.config_test_duration = 3
+        self.cps_tester.config_test_duration = 1
         self.cps_tester.start()
         self.assertFalse(self.cps_tester.is_time_up())
-        sleep(3.1)
+        sleep(1.1)
         self.assertTrue(self.cps_tester.is_time_up())
 
     def test_instan_calculation_default_values(self):
@@ -120,6 +120,7 @@ class TestCPSTester(unittest.TestCase):
 
     def test_instant_calculation_current_cps(self):
         """Tests if the current_cps in the instant calculation is correct""" 
+        self.cps_tester.config_test_duration = 5
         self.cps_tester.start()
         self.cps_tester.add_click()
         self.cps_tester.add_click()
@@ -128,6 +129,7 @@ class TestCPSTester(unittest.TestCase):
 
     def test_instant_calculation_current_cps_with_float(self):
         """Tests if the current_cps in the instant calculation is correct when the time is not a whole number""" 
+        self.cps_tester.config_test_duration = 5
         self.cps_tester.start()
         self.cps_tester.add_click()
         sleep(0.5)
@@ -136,13 +138,13 @@ class TestCPSTester(unittest.TestCase):
     def test_instant_calculation_time_left(self):
         """Tests if the time_left in the instant calculation is correct"""
         self.cps_tester.start()
-        sleep(1)
-        self.assertAlmostEqual(self.cps_tester.instant_calculate().time_left, 4)
+        sleep(self.cps_tester.config_test_duration * 0.2)
+        self.assertAlmostEqual(self.cps_tester.instant_calculate().time_left, 0.4)
 
     def test_instant_calculation_time_left_when_time_over(self):
         """Tests if the time_left in the instant calculation is correct when time's over"""
         self.cps_tester.start()
-        sleep(5.1)
+        sleep(self.cps_tester.config_test_duration * 1.02)
         self.assertEqual(self.cps_tester.instant_calculate().time_left, 0)
 
     def test_final_calculation_total_clicks(self):
@@ -150,29 +152,31 @@ class TestCPSTester(unittest.TestCase):
         self.cps_tester.start()
         self.cps_tester.add_click()
         self.cps_tester.add_click()
-        sleep(5.1)
+        sleep(self.cps_tester.config_test_duration * 1.02)
         self.assertEqual(self.cps_tester.final_calculate().total_clicks, 2)
 
     def test_final_calculation_total_cps(self):
         """Tests if the total_cps in the final calculation is correct"""
+        self.cps_tester.config_test_duration = 5
         self.cps_tester.start()
         for _ in range(0, 10):
             self.cps_tester.add_click()
-        sleep(5.1)
+        sleep(5)
         self.assertEqual(self.cps_tester.final_calculate().total_cps, 2)
 
     def test_final_calculation_total_cps_float(self):
         """Tests if the total_cps in the final calculation is correct when the total_cps is not a whole number"""
+        self.cps_tester.config_test_duration = 5
         self.cps_tester.start()
         for _ in range(0, 7):
             self.cps_tester.add_click()
-        sleep(5.1)
+        sleep(5)
         self.assertEqual(self.cps_tester.final_calculate().total_cps, 1.4)
 
     def test_final_calculation_before_end(self):
         """Tests the values of the final calculation when the cps tester did not end yet"""
         self.cps_tester.start()
-        sleep(0.1)
+        sleep(self.cps_tester.config_test_duration * 0.02)
         self.assertEqual(self.cps_tester.final_calculate().total_clicks, -1)
         self.assertEqual(self.cps_tester.final_calculate().total_cps, -1)
 
@@ -186,7 +190,7 @@ class TestCPSTester(unittest.TestCase):
         self.cps_tester.start()
         self.cps_tester.add_click()
         self.cps_tester.add_click()
-        sleep(5.1)
+        sleep(self.cps_tester.config_test_duration * 1.02)
         self.cps_tester.reset_to_default()
         self.assertEqual(self.cps_tester.current_clicks, 0)
         self.assertEqual(self.cps_tester.start_time, 0)
